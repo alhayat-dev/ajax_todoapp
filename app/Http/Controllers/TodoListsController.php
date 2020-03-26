@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\TodoList;
 use Illuminate\Http\Request;
 
 class TodoListsController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('todolists.index');
+        $todolists = $request->user()
+                            ->todolists()
+                            ->orderby('updated_at', 'desc')
+                            ->get();
+        return view('todolists.index')->with('todolists', $todolists);
     }
 
     /**
