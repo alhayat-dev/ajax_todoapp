@@ -17,25 +17,23 @@ class TodoListsController extends Controller
         return view('todolists.index')->with('todolists', $todolists);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $todolist = new TodoList();
+        return view('todolists.form')->with('todolist', $todolist);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|min:5',
+            'description' => 'min:5'
+        ]);
+        $data = $request->all();
+        $todolist = $request->user()->todolists()->create($request->all());
+//        $data['user_id'] = $request->user()->id;
+//        $todolist =  TodoList::create($data);
+        return view('todolists.item', compact('todolist'));
     }
 
     /**
